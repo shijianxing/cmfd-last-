@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.DAO.BannerDao">
+    <select id="quaryByAll" resultType="com.baizhi.entity.Banner">
+      select  id,title,img,create_date,status from banner
+    </select>
+    <update id="updateById">
+        update banner
+        <set>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="img!=null">
+                img=#{img},
+            </if>
+            <if test="create_date!=null">
+                create_date=#{create_date},
+            </if>
+
+            <if test="status!=null">
+                status=#{status}
+            </if>
+
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteById"  parameterType="java.lang.String">
+        delete  from banner where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")" >
+          #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertByBanner">
+        insert into banner  (id,title,img,create_date,status) values (#{id},#{title},#{img},#{create_date},#{status})
+    </insert>
+    
+    <select id="queryCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from banner
+    </select>
+
+    <select id="queryByPageAll" resultType="com.baizhi.entity.Banner">
+        select id,title,img,create_date,status from banner  limit #{start},#{end}
+
+    </select>
+    <select id="queryFirst" resultType="com.baizhi.entity.firstpager.bannerOne">
+          select  id,title thumbnail,img  as 'desc' from banner
+    </select>
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.DAO.ChapterDao">
+    <select id="queryByAlum" resultType="com.baizhi.entity.Chapter">
+      select  id,title,size,duration,src,status from chapter where album_id=#{id}
+    </select>
+    <update id="updateChapter">
+        update chapter
+        <set>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="duration!=null">
+                duration=#{duration},
+            </if>
+
+            <if test="src!=null">
+                src=#{src},
+            </if>
+            <if test="size!=null">
+                SIZE=#{size},
+            </if>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteBatchByname"  parameterType="java.lang.String">
+        delete  from chapter where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")" >
+          #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertChapter">
+        insert into Chapter (id,title,album_id,size,duration,src,status) values (#{id},#{title},#{album_id,},#{size},#{duration},#{src},#{status})
+    </insert>
+    
+    <select id="queryCount"  resultType="java.lang.Integer">
+        select count(#{id}) from Chapter
+    </select>
+
+    <select id="queryByIdPagerAll" resultType="com.baizhi.entity.Chapter">
+        select id,title,size,duration,src,status from  Chapter where album_id=#{id} limit #{start},#{end}
+    </select>
+    <select id="queryfirstALL" resultType="com.baizhi.entity.firstpager.ChapterOne">
+         select title,size,src as download_url,duration from  Chapter where  album_id=#{id}
+    </select>
+    <select id="queryAll" resultType="com.baizhi.entity.firstpager.ChapterOne">
+         select title,size,src as download_url,duration from  Chapter
+    </select>
+</mapper>

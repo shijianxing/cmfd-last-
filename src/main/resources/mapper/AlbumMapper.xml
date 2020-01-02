@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.DAO.AlbumDao">
+    <delete id="deleteAll"  parameterType="java.lang.String">
+        delete  from Album where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")" >
+          #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertByalbum">
+        insert into Album  (id,title,img,score,author,broadcaster,count,brief,create_date,status) values (#{id},#{title},#{img},#{score},#{author},#{broadcaster},#{count},#{brief},#{create_date},#{status})
+    </insert>
+    
+    <select id="queryCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from Album
+    </select>
+
+    <select id="queryAlbunPager" resultType="Album">
+        select id,title,img,score,author,broadcaster,count,brief,create_date,status from Album  limit #{start},#{end}
+    </select>
+    <select id="queryfirstAll" resultType="com.baizhi.entity.firstpager.AlbunOne">
+        select id,title,img as thumbnail,author,count as set_count,create_date from Album
+    </select>
+
+</mapper>
